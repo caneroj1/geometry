@@ -38,6 +38,11 @@ func (p *Points) Sort() {
 	sort.Sort(p)
 }
 
+// Reverse returns the reverse ordering of the Points
+func (p *Points) Reverse() sort.Interface {
+	return sort.Reverse(p)
+}
+
 // Perimeter calculates the perimeter of the lines represented by the points
 func (p Points) Perimeter() float64 {
 	var perimeter float64
@@ -103,7 +108,6 @@ func (ge GeometryError) Error() string {
 // ReadPointsFromCSV reads a csv file where each line is in the format x1,y1,x2,y2
 // where x1,y1 form the left point of the line segment and x2,y2 form the right point.
 func ReadPointsFromCSV(path string) (Points, *GeometryError) {
-	_ = "breakpoint"
 	fh, err := os.Open(path)
 	if err != nil {
 		return make(Points, 10), &GeometryError{err.Error()}
@@ -142,4 +146,16 @@ func getPointFromRecord(record []string, segment int) (Point, *GeometryError) {
 	}
 
 	return MakePoint(x1, y1, segment, false), nil
+}
+
+// Last returns the last point in the slice of Points.
+// It returns a copy.
+func (p Points) Last() Point {
+	return p[len(p)-1]
+}
+
+// SecondToLast returns the second to last point in the
+// slice of Points. It returns a copy.
+func (p Points) SecondToLast() Point {
+	return p[len(p)-2]
 }
